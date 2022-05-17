@@ -1,0 +1,81 @@
+
+plugins {
+    id 'java'
+    id "org.jetbrains.kotlin.jvm" version "${kotlinVersion}"
+    id "org.jetbrains.kotlin.kapt" version "${kotlinVersion}"
+    id "org.jetbrains.kotlin.plugin.allopen" version "${kotlinVersion}"
+
+    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id 'application'
+}
+
+repositories {
+    maven{
+        url "http://maven.aliyun.com/nexus/content/groups/public"
+        allowInsecureProtocol(true)
+    }
+    maven{
+        url "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
+    }
+    mavenCentral()
+}
+
+
+dependencies {
+
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    api("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+
+//    implementation(group: 'org.apache.poi', name: 'poi', version: '4.1.2')
+//    implementation(group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2')
+//    implementation(group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '4.1.2')
+    implementation(group: 'com.deepoove', name: 'poi-tl', version: '1.12.0')
+    implementation(group: 'org.springframework', name: 'spring-expression', version: '5.3.18')
+    implementation(group: 'org.docx4j', name: 'docx4j-JAXB-Internal', version: '8.3.1')
+    implementation(group: 'org.docx4j', name: 'docx4j-JAXB-ReferenceImpl', version: '8.3.1')
+    implementation(group: 'org.docx4j', name: 'docx4j-JAXB-MOXy', version: '8.3.1')
+    implementation(group: 'org.docx4j', name: 'docx4j-export-fo', version: '8.3.1')
+
+    api group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.2'
+    api group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.2'
+    api group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.2'
+
+
+    implementation 'info.picocli:picocli:4.6.3'
+    kapt 'info.picocli:picocli-codegen:4.6.3'
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.6.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.6.2")
+}
+
+mainClassName = "io.euryale.docx.render.cli.MainKt"
+
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+compileKotlin {
+    sourceCompatibility = "${jvmTagetVersion}"
+    targetCompatibility = "${jvmTagetVersion}"
+    kotlinOptions {
+        jvmTarget = "${jvmTagetVersion}"
+        //Will retain parameter names for Java reflection
+        javaParameters = true
+    }
+}
+
+compileTestKotlin {
+    sourceCompatibility = "${jvmTagetVersion}"
+    targetCompatibility = "${jvmTagetVersion}"
+    kotlinOptions {
+        jvmTarget = "${jvmTagetVersion}"
+        javaParameters = true
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
