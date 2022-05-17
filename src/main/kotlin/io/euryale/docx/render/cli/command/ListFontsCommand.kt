@@ -13,7 +13,7 @@ class ListFontsCommand :BaseCommand(){
 
         val fontMapper = IdentityPlusMapper()
         loadFonts(fontMapper, null)
-        this.printSupportFonts(fontMapper)
+        printSupportFonts(fontMapper)
 
     }
 }
